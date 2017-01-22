@@ -25,7 +25,9 @@ class CalculatorBrain {
         "+" : Operation.BinaryOperation({$0 + $1}),
         "-" : Operation.BinaryOperation({$0 - $1}),
         "÷" : Operation.BinaryOperation({$0 / $1}),
-        "=" : Operation.Equals
+        "n": Operation.BinaryOperation({pow($0, $1)}),
+        "=" : Operation.Equals,
+        "C" : Operation.Clear
     ]
     enum Operation {
         
@@ -33,6 +35,7 @@ class CalculatorBrain {
         case UnaryOperation ((Double) -> Double)
         case BinaryOperation ((Double, Double) -> Double)
         case Equals
+        case Clear
     }
     
     func performOperation (symbol: String) {
@@ -47,6 +50,9 @@ class CalculatorBrain {
                 pending = PendingBinaryOperationInfo(binaryFunction: bifoo, firstOperand: accumulator)
             case .Equals:
                executeBinaryOperation()
+            case .Clear:
+                pending = nil
+                accumulator = 0.0
             }
         }
     }
@@ -63,6 +69,7 @@ class CalculatorBrain {
         var binaryFunction: (Double,Double) -> Double
         var firstOperand: Double
     }
+
     
     var result: Double{
         get {

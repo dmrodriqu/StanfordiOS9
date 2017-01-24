@@ -21,6 +21,9 @@ class CalculatorBrain {
         "e" : Operation.Constant(M_E),
         "√" : Operation.UnaryOperation(sqrt), // sqrt
         "cos": Operation.UnaryOperation(cos), // cos
+        "sin": Operation.UnaryOperation(sin), // sin
+        "logx": Operation.UnaryOperation(log10), // log(x)
+        "tan": Operation.UnaryOperation(tan),
         "x" : Operation.BinaryOperation({$0 * $1}),
         "+" : Operation.BinaryOperation({$0 + $1}),
         "-" : Operation.BinaryOperation({$0 - $1}),
@@ -43,16 +46,26 @@ class CalculatorBrain {
             switch operation {
             case .Constant (let value):
                 accumulator = value
+                print(symbol)
             case .UnaryOperation (let unifoo):
                 accumulator = unifoo(accumulator)
+                print(symbol)
             case .BinaryOperation (let bifoo):
                 executeBinaryOperation()
                 pending = PendingBinaryOperationInfo(binaryFunction: bifoo, firstOperand: accumulator)
+                if isPartialResult{
+                    print(symbol)
+                    isPartialResult = false
+                    print(isPartialResult)
+                }
+                isPartialResult = true
             case .Equals:
                executeBinaryOperation()
             case .Clear:
                 pending = nil
                 accumulator = 0.0
+                isPartialResult = true
+                print(isPartialResult)
             }
         }
     }
@@ -64,6 +77,8 @@ class CalculatorBrain {
     }
     
     private var pending: PendingBinaryOperationInfo?
+    private var isPartialResult = true
+    
     
     struct PendingBinaryOperationInfo {
         var binaryFunction: (Double,Double) -> Double

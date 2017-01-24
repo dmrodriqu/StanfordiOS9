@@ -17,7 +17,10 @@ class ViewController: UIViewController {
     // decimal is not typed, true if typed, similar to userIsCurrentlyTyping
     private var decimalHasNotBeenTyped = true
     
-    @IBOutlet weak var Decimal: UIButton!
+    @IBOutlet private weak var userSequenceDisplay: UILabel!
+    
+    @IBOutlet private weak var Decimal: UIButton!
+    
     @IBAction private func touchDigit(_ sender: UIButton) {
         let digit = sender.currentTitle!
         let decimalIsThere = display.text!.range(of: ".") != nil
@@ -44,6 +47,9 @@ class ViewController: UIViewController {
             display.text = String(newValue)
         }
     }
+    
+    
+    
     private var brain: CalculatorBrain = CalculatorBrain()
     
     @IBAction private func performOperation(_ sender: UIButton) {
